@@ -1,0 +1,144 @@
+/* =========================================================
+   Mermaid UI Theme
+   - System Map をポータルUIと同レイヤーに統一
+   ========================================================= */
+
+.mermaidMount {
+  margin-top: 8px;
+  position: relative;
+  background: transparent;
+}
+
+/* Fallback / Mermaid cross-fade */
+.mermaidFallback,
+.mermaid {
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.mermaidFallback {
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  padding: 10px 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.mermaidFallback.is-fading-out {
+  opacity: 0;
+  transform: translateY(-2px);
+}
+
+/* index.html 側のフォールバックSVG装飾を無効化して、外側パネルに寄せる */
+.mermaidFallback .mapFlow {
+  width: auto;
+  max-width: 100%;
+  margin-inline: auto;
+  border: 0 !important;
+  background: transparent !important;
+  border-radius: 0;
+}
+
+/* Inner glass panel: UI card と同系統 */
+.mermaid {
+  margin: 0;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-soft);
+  padding: 10px 12px;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.mermaid.is-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mermaid[hidden] {
+  display: none !important;
+}
+
+.mermaid svg {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-inline: auto;
+  flex: 0 0 auto;
+  background: transparent !important;
+  font-family: var(--font) !important;
+}
+
+/* Mermaid generated backgrounds を透明化 */
+.mermaid .background,
+.mermaid .root,
+.mermaid .labelBkg {
+  fill: transparent !important;
+  background: transparent !important;
+}
+
+/* Node: panel-like rounded box */
+.mermaid .node rect,
+.mermaid .node polygon,
+.mermaid .node path {
+  fill: color-mix(in srgb, var(--panel-2) 90%, transparent) !important;
+  stroke: var(--border) !important;
+  stroke-width: 1.25 !important;
+  filter: drop-shadow(0 8px 16px color-mix(in srgb, var(--text) 8%, transparent));
+}
+
+.mermaid .node rect {
+  rx: 14px;
+  ry: 14px;
+}
+
+/* Edge / Arrow: border + primary の中間トーン */
+.mermaid .edgePath .path,
+.mermaid path.path,
+.mermaid .flowchart-link,
+.mermaid .edge-thickness-normal {
+  stroke: color-mix(in srgb, var(--border) 58%, var(--primary) 42%) !important;
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .arrowheadPath,
+.mermaid marker path {
+  fill: color-mix(in srgb, var(--border) 58%, var(--primary) 42%) !important;
+  stroke: color-mix(in srgb, var(--border) 58%, var(--primary) 42%) !important;
+}
+
+/* Text */
+.mermaid text,
+.mermaid .label,
+.mermaid .label text,
+.mermaid .nodeLabel,
+.mermaid span.nodeLabel {
+  fill: var(--text) !important;
+  color: var(--text) !important;
+  font-family: var(--font) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.mermaid .cluster rect {
+  fill: color-mix(in srgb, var(--panel) 90%, transparent) !important;
+  stroke: var(--border) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mermaidFallback,
+  .mermaid {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .mermaid {
+    opacity: 1;
+  }
+}

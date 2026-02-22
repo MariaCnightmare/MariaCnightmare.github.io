@@ -3,84 +3,241 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
   <title>MariaCnightmare | Portfolio</title>
   <meta name="description" content="個人開発ポータル：探索型UI・自動化・可視化で、意思決定を速くする。" />
 
-  <!-- Minimal OGP (imageは未設定。必要なら後で /assets/og.png を置く) -->
   <meta property="og:title" content="MariaCnightmare | Portfolio" />
   <meta property="og:description" content="探索型UI・自動化・可視化で、意思決定を速くする。" />
   <meta property="og:type" content="website" />
 
   <style>
-    :root { color-scheme: light dark; }
-    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif; }
+    /* =========================================================
+       Theme Tokens
+       - html[data-theme] を切り替えてダーク/ライトを統一
+       ========================================================= */
+
+    :root {
+      color-scheme: light dark;
+
+      /* base */
+      --max-w: 1060px;
+      --radius: 18px;
+
+      /* motion */
+      --dur-fast: 140ms;
+      --dur: 220ms;
+      --dur-slow: 360ms;
+      --ease: cubic-bezier(.2,.8,.2,1);
+
+      /* typography */
+      --font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", sans-serif;
+
+      /* default = light (ユーザー未指定時はJSで prefers を採用) */
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --panel-2: #f0f5ff;
+      --text: #0f172a;
+      --muted: rgba(15, 23, 42, .68);
+      --border: rgba(15, 23, 42, .12);
+      --shadow: 0 14px 34px rgba(15, 23, 42, .10);
+      --shadow-soft: 0 10px 22px rgba(15, 23, 42, .08);
+
+      --primary: #0b7285;
+      --accent: #f08c00;
+
+      --hero-glow: radial-gradient(800px 360px at 80% -10%, rgba(11,114,133,.18), transparent 60%);
+      --noise: radial-gradient(900px 260px at 10% 0%, rgba(240,140,0,.10), transparent 60%);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0b0f17;
+      --panel: rgba(255,255,255,.055);
+      --panel-2: rgba(255,255,255,.075);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.62);
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 18px 44px rgba(0,0,0,.42);
+      --shadow-soft: 0 10px 26px rgba(0,0,0,.32);
+
+      --primary: #57c2d6;
+      --accent: #ffb020;
+
+      --hero-glow: radial-gradient(900px 420px at 70% -10%, rgba(87,194,214,.22), transparent 64%);
+      --noise: radial-gradient(900px 300px at 10% 0%, rgba(255,176,32,.11), transparent 62%);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--hero-glow), var(--noise), var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
     a { color: inherit; text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    .wrap { max-width: 1060px; margin: 0 auto; padding: 64px 20px; }
-    header { display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+    /* =========================================================
+       Layout
+       ========================================================= */
+
+    .wrap { max-width: var(--max-w); margin: 0 auto; padding: 64px 20px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
     h1 { margin:0; font-size: 34px; letter-spacing: .2px; }
-    .tag { opacity:.75; font-size: 14px; }
+    .tag { opacity:.75; font-size: 14px; color: var(--muted); }
 
     .card {
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-      border-radius: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow-soft);
       padding: 20px;
       margin-top: 16px;
+      position: relative;
+      overflow: clip;
+      transition:
+        transform var(--dur) var(--ease),
+        box-shadow var(--dur) var(--ease),
+        border-color var(--dur) var(--ease),
+        background var(--dur) var(--ease);
     }
-
-    .hero {
-      padding: 26px;
-      border-radius: 20px;
-      border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-      background: color-mix(in srgb, currentColor 4%, transparent);
-      margin-top: 16px;
-    }
-    .hero h2 { margin: 0; font-size: 22px; line-height: 1.3; }
-    .hero p { margin: 10px 0 0; opacity: .85; line-height: 1.6; }
-
-    .btn {
-      display:inline-block;
-      padding:10px 12px;
-      border:1px solid color-mix(in srgb, currentColor 22%, transparent);
-      border-radius: 12px;
-    }
-    .bar { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; align-items:center; }
-    .right { margin-left:auto; opacity:.75; font-size:12px; }
 
     .grid { display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 12px; }
+
+    /* =========================================================
+       Subtle Motion (印象的だけど軽い)
+       ========================================================= */
+
+    /* Scroll-in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+      will-change: opacity, transform;
+    }
+    .reveal.is-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Card hover lift */
+    .hover-lift:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+      border-color: color-mix(in srgb, var(--border) 40%, var(--primary) 60%);
+    }
+    .press:active { transform: translateY(-2px) scale(.995); }
+
+    /* Hero glow pulse (very subtle) */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -60px -80px auto auto;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle at center, rgba(11,114,133,.16), transparent 62%);
+      filter: blur(2px);
+      opacity: .75;
+      transform: translate3d(0,0,0);
+      animation: glow 8s var(--ease) infinite;
+      pointer-events: none;
+    }
+    html[data-theme="dark"] .hero::before {
+      background: radial-gradient(circle at center, rgba(87,194,214,.18), transparent 62%);
+    }
+    @keyframes glow {
+      0%, 100% { transform: translate(0,0) scale(1); opacity: .65; }
+      50% { transform: translate(-10px, 8px) scale(1.04); opacity: .80; }
+    }
+
+    /* =========================================================
+       UI atoms
+       ========================================================= */
+
+    .muted { color: var(--muted); }
 
     .pill {
       display:inline-block;
       font-size: 12px;
       padding: 2px 8px;
       border-radius: 999px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-      opacity: .85;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      opacity: .92;
       white-space: nowrap;
     }
 
-    .row { display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; align-items:center; }
-    .desc { margin-top: 8px; opacity: .92; font-size: 14px; line-height: 1.55; }
-    .meta { margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; opacity: .75; font-size: 12px; }
+    .bar { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; align-items:center; }
+    .right { margin-left:auto; color: var(--muted); font-size:12px; }
+
+    .btn {
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding:10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+    }
+    .btn:hover {
+      border-color: color-mix(in srgb, var(--border) 40%, var(--primary) 60%);
+      text-decoration: none;
+      transform: translateY(-2px);
+    }
+    .btn-primary {
+      border-color: color-mix(in srgb, var(--primary) 45%, var(--border) 55%);
+      background: linear-gradient(135deg,
+        color-mix(in srgb, var(--primary) 65%, transparent),
+        color-mix(in srgb, var(--primary) 25%, transparent)
+      );
+    }
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .hero {
+      padding: 26px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 88%, transparent);
+      margin-top: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero h2 { margin: 0; font-size: 24px; line-height: 1.3; }
+    .hero p { margin: 10px 0 0; color: var(--muted); }
+
+    .split { display:grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+    @media (max-width: 860px){ .split { grid-template-columns: 1fr; } }
 
     input[type="search"]{
       width: 100%;
       padding: 10px 12px;
       border-radius: 12px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-      background: transparent;
-      color: inherit;
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      color: var(--text);
+      outline: none;
+      transition: box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
     }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: .95em; }
+    input[type="search"]:focus{
+      border-color: color-mix(in srgb, var(--border) 40%, var(--primary) 60%);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
+    }
 
-    .split { display:grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
-    @media (max-width: 860px){ .split { grid-template-columns: 1fr; } }
+    .desc { margin-top: 8px; opacity: .94; font-size: 14px; line-height: 1.55; }
+    .meta { margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; color: var(--muted); font-size: 12px; }
+    .row { display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; align-items:center; }
 
     .map {
-      border-radius: 18px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: color-mix(in srgb, var(--panel) 90%, transparent);
       padding: 16px;
     }
     .mapTitle { font-weight: 700; margin-bottom: 8px; }
@@ -88,33 +245,97 @@
     .node {
       padding: 10px 12px;
       border-radius: 14px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
-      background: color-mix(in srgb, currentColor 3%, transparent);
+      border: 1px solid var(--border);
+      background: var(--panel-2);
       font-size: 13px;
-      opacity:.92;
+      opacity:.95;
     }
-    footer { margin-top: 44px; opacity: .7; font-size: 13px; }
+
+    /* Mermaid-like map (no external library) */
+    .mapFlow {
+      width: auto;
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-inline: auto;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      border: 1px solid var(--border);
+    }
+    .mapFlow .mf-node {
+      fill: var(--panel-2);
+      stroke: var(--border);
+      stroke-width: 1.2;
+    }
+    .mapFlow .mf-line {
+      stroke: color-mix(in srgb, var(--border) 35%, var(--primary) 65%);
+      stroke-width: 1.5;
+    }
+    .mapFlow .mf-text {
+      fill: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .mermaidMount { margin-top: 8px; }
+    .mermaidFallback[hidden] { display: none !important; }
+    .mermaid {
+      margin: 0;
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      overflow-x: auto;
+    }
+    .mermaid svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    footer { margin-top: 44px; color: var(--muted); font-size: 13px; }
+
+    /* Reduce motion respect */
+    @media (prefers-reduced-motion: reduce){
+      .reveal { transition: none; transform: none; opacity: 1; }
+      .hero::before { animation: none; }
+      .btn, .card { transition: none; }
+    }
+
+
   </style>
+  <link rel="stylesheet" href="./assets/glow.css" />
+  <link rel="stylesheet" href="./assets/mermaid-ui.css" />
 </head>
+
 
 <body>
   <div class="wrap">
-    <header>
-      <h1>MariaCnightmare</h1>
-      <div class="tag">個人開発ポータル</div>
+    <header class="reveal">
+      <div>
+        <h1>MariaCnightmare</h1>
+        <div class="tag">個人開発ポータル</div>
+      </div>
+
+      <div class="bar" style="margin-top:0;">
+        <button id="themeBtn" class="btn btn-icon press" type="button" aria-label="Toggle theme" title="Toggle theme">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
+      </div>
     </header>
 
-    <section class="hero" aria-label="Hero">
+    <section class="hero reveal" aria-label="Hero">
       <h2 id="headline">探索型UI・自動化・可視化で、意思決定を速くする。</h2>
       <p id="subheadline">ここは個人開発の展示ポータルです。主役プロジェクト（Showcase）と、全リポジトリの自動カタログ（Catalog）を併置します。</p>
+
       <div class="bar">
-        <a class="btn" href="https://github.com/MariaCnightmare">GitHub Profile</a>
-        <a class="btn" href="https://github.com/MariaCnightmare?tab=repositories">Repositories</a>
+        <a class="btn btn-primary press" href="https://github.com/MariaCnightmare">GitHub Profile</a>
+        <a class="btn press" href="https://github.com/MariaCnightmare?tab=repositories">Repositories</a>
         <div class="right" id="catalogStamp"></div>
       </div>
     </section>
 
-    <section class="card" aria-label="About">
+    <section class="card reveal" aria-label="About">
       <div class="split">
         <div>
           <strong>About</strong>
@@ -125,24 +346,24 @@
         </div>
         <div>
           <strong>Principles</strong>
-          <ul id="principles" style="margin:10px 0 0; padding-left:18px; opacity:.9; line-height:1.7;"></ul>
+          <ul id="principles" style="margin:10px 0 0; padding-left:18px; opacity:.92; line-height:1.7;"></ul>
         </div>
       </div>
     </section>
 
-    <section class="card" aria-label="Showcase">
+    <section class="card reveal" aria-label="Showcase">
       <strong>Showcase</strong>
       <div class="muted" style="margin-top:8px;">見せたいものを先頭固定。詳細は各リポジトリへ。</div>
       <div id="showcase" class="grid"></div>
     </section>
 
-    <section class="card" aria-label="System Map">
+    <section class="card reveal" aria-label="System Map">
       <strong>System Map</strong>
       <div class="muted" style="margin-top:8px;">何が何のために存在するか、を一枚で。</div>
       <div id="systemMap" class="grid"></div>
     </section>
 
-    <section class="card" aria-label="Catalog">
+    <section class="card reveal" aria-label="Catalog">
       <strong>Catalog</strong>
       <div class="muted" style="margin-top:8px;">更新が多い順に表示（fork/archived除外）。</div>
 
@@ -158,25 +379,85 @@
       </div>
     </section>
 
-    <footer>
+    <footer class="reveal">
       © MariaCnightmare — Built with GitHub Pages.
     </footer>
   </div>
 
+  <script src="./assets/mermaid-ui.js"></script>
   <script>
+    /* =========================================================
+       Theme: dark/light toggle with OS preference + localStorage
+       ========================================================= */
+
+    const THEME_KEY = "mc_theme";
+    const $themeBtn = document.getElementById("themeBtn");
+    const $themeIcon = document.getElementById("themeIcon");
+
+    function getPreferredTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "dark" || saved === "light") return saved;
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      // icon: dark=moon, light=sun (a little theater)
+      $themeIcon.textContent = theme === "dark" ? "🌙" : "☀️";
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute("data-theme") || getPreferredTheme();
+      const next = current === "dark" ? "light" : "dark";
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    }
+
+    applyTheme(getPreferredTheme());
+    $themeBtn.addEventListener("click", toggleTheme);
+
+    /* =========================================================
+       Scroll-in reveal (IntersectionObserver)
+       ========================================================= */
+
+    (function setupReveal(){
+      const els = Array.from(document.querySelectorAll(".reveal"));
+      if (!("IntersectionObserver" in window)) {
+        els.forEach(el => el.classList.add("is-in"));
+        return;
+      }
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add("is-in");
+            io.unobserve(e.target);
+          }
+        }
+      }, { threshold: 0.12 });
+      els.forEach(el => io.observe(el));
+    })();
+
+    /* =========================================================
+       Data render (showcase.json + repos.json)
+       ========================================================= */
+
     const $catalogStamp = document.getElementById("catalogStamp");
     const $headline = document.getElementById("headline");
     const $subheadline = document.getElementById("subheadline");
     const $principles = document.getElementById("principles");
     const $showcase = document.getElementById("showcase");
     const $systemMap = document.getElementById("systemMap");
-
     const $projects = document.getElementById("projects");
     const $q = document.getElementById("q");
     const $hint = document.getElementById("hint");
 
-    function esc(s){ return (s ?? "").toString()
-      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
+    function esc(s){
+      return (s ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;");
+    }
 
     function pill(text){ return `<span class="pill">${esc(text)}</span>`; }
 
@@ -185,7 +466,7 @@
       const lang = r.language ? pill(r.language) : "";
       const stars = typeof r.stargazers_count === "number" ? `★ ${r.stargazers_count}` : "";
       const updated = r.updated_at ? `Updated: ${r.updated_at.slice(0,10)}` : "";
-      const homepage = r.homepage ? `<a class="pill" href="${esc(r.homepage)}">Demo</a>` : "";
+      const homepage = r.homepage ? `<a class="pill press" href="${esc(r.homepage)}">Demo</a>` : "";
 
       const title = override?.title ?? r.name;
       const tagline = override?.tagline ?? (r.description || "");
@@ -197,7 +478,7 @@
         : `<div class="desc muted">（説明が未設定です。repo description を入れると一気に映えます。）</div>`;
 
       return `
-        <div class="card" style="margin:0;">
+        <div class="card hover-lift press" style="margin:0;">
           <strong><a href="${esc(repoUrl)}">${esc(title)}</a></strong>
           ${descHtml}
           <div class="row">${lang} ${homepage} ${focus} ${topics}</div>
@@ -207,13 +488,173 @@
     }
 
     function mapBox(title, nodes){
-      const nodeHtml = (nodes || []).map(n => `<div class="node">${esc(n)}</div>`).join("");
+      const nodeHtml = mermaidLikeFlow(nodes, title);
+      const graph = buildMermaidFlow(nodes);
+      const graphEncoded = encodeURIComponent(graph);
       return `
-        <div class="map">
+        <div class="card map hover-lift">
           <div class="mapTitle">${esc(title)}</div>
-          <div class="mapNodes">${nodeHtml}</div>
+          <div class="mermaidMount" data-graph="${graphEncoded}">
+            <div class="mermaidFallback">${nodeHtml}</div>
+            <pre class="mermaid" hidden></pre>
+          </div>
         </div>
       `;
+    }
+
+    function truncateLabel(text, maxLen = 34) {
+      const raw = String(text ?? "");
+      if (raw.length <= maxLen) return raw;
+      return `${raw.slice(0, maxLen - 1)}…`;
+    }
+
+    // Mermaid風の縦フローチャートをSVGで描画（外部ライブラリ不要）
+    function mermaidLikeFlow(nodes, title) {
+      const items = (nodes || []).map(n => String(n ?? "")).filter(Boolean);
+      if (!items.length) return `<div class="muted">（ノード未設定）</div>`;
+
+      const padX = 16;
+      const padY = 14;
+      const boxW = 320;
+      const boxH = 48;
+      const gapY = 24;
+      const width = padX * 2 + boxW;
+      const height = padY * 2 + (boxH * items.length) + (gapY * (items.length - 1));
+      const markerId = `mf-arrow-${Math.random().toString(36).slice(2, 9)}`;
+
+      const body = items.map((label, i) => {
+        const y = padY + i * (boxH + gapY);
+        const textY = y + 29;
+        const line = i < items.length - 1
+          ? `<line class="mf-line" x1="${padX + boxW / 2}" y1="${y + boxH + 2}" x2="${padX + boxW / 2}" y2="${y + boxH + gapY - 6}" marker-end="url(#${markerId})"></line>`
+          : "";
+        return `
+          <g>
+            <title>${esc(label)}</title>
+            <rect class="mf-node" x="${padX}" y="${y}" width="${boxW}" height="${boxH}" rx="10" ry="10"></rect>
+            <text class="mf-text" x="${padX + 14}" y="${textY}">${esc(truncateLabel(label))}</text>
+          </g>
+          ${line}
+        `;
+      }).join("");
+
+      return `
+        <svg class="mapFlow" viewBox="0 0 ${width} ${height}" role="img" aria-label="${esc(title)} のフロー図">
+          <defs>
+            <marker id="${markerId}" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 z" fill="color-mix(in srgb, var(--border) 35%, var(--primary) 65%)"></path>
+            </marker>
+          </defs>
+          ${body}
+        </svg>
+      `;
+    }
+
+    function escapeMermaidLabel(s) {
+      return String(s ?? "")
+        .replaceAll("\\", "\\\\")
+        .replaceAll('"', '\\"')
+        .replaceAll("\n", " ")
+        .trim();
+    }
+
+    function buildMermaidFlow(nodes) {
+      const items = (nodes || []).map(n => String(n ?? "")).filter(Boolean);
+      if (!items.length) return "flowchart TB\nA[\"No data\"]";
+
+      const lines = ["flowchart TB"];
+      items.forEach((label, i) => {
+        lines.push(`N${i}["${escapeMermaidLabel(label)}"]`);
+        if (i > 0) lines.push(`N${i - 1} --> N${i}`);
+      });
+      return lines.join("\n");
+    }
+
+    let mermaidLoadPromise = null;
+    let mermaidReady = false;
+
+    function loadMermaidScript() {
+      if (window.mermaid) return Promise.resolve(window.mermaid);
+      if (mermaidLoadPromise) return mermaidLoadPromise;
+
+      mermaidLoadPromise = new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js";
+        script.async = true;
+        script.onload = () => {
+          if (window.mermaid) resolve(window.mermaid);
+          else reject(new Error("mermaid global not found"));
+        };
+        script.onerror = () => reject(new Error("failed to load mermaid.min.js"));
+        document.head.appendChild(script);
+      });
+      return mermaidLoadPromise;
+    }
+
+    async function hydrateSystemMapMermaid() {
+      const mounts = Array.from(document.querySelectorAll("#systemMap .mermaidMount"));
+      if (!mounts.length) return;
+
+      try {
+        const mermaid = await loadMermaidScript();
+        if (!mermaidReady) {
+          const mermaidInit = window.MermaidUI?.getMermaidInitConfig?.() || {
+            startOnLoad: false,
+            securityLevel: "strict",
+            theme: "base",
+            flowchart: { curve: "basis" }
+          };
+          mermaid.initialize({
+            ...mermaidInit
+          });
+          mermaidReady = true;
+        }
+
+        for (const mount of mounts) {
+          if (mount.dataset.mermaidDone === "1") continue;
+
+          const graph = decodeURIComponent(mount.dataset.graph || "");
+          const mermaidEl = mount.querySelector(".mermaid");
+          const fallbackEl = mount.querySelector(".mermaidFallback");
+          if (!mermaidEl || !graph) continue;
+
+          mermaidEl.classList.remove("is-ready");
+          mermaidEl.textContent = graph;
+          mermaidEl.hidden = false;
+          await mermaid.run({ nodes: [mermaidEl] });
+          window.MermaidUI?.enhanceAndAnimate?.({
+            mount,
+            mermaidEl,
+            fallbackEl
+          });
+          if (!window.MermaidUI && fallbackEl) fallbackEl.hidden = true;
+          mount.dataset.mermaidDone = "1";
+        }
+      } catch (e) {
+        // CDN不可時はSVGフォールバックを使い続ける
+        console.warn("Mermaid load skipped:", e?.message || e);
+      }
+    }
+
+    function setupSystemMapMermaidLazyLoad() {
+      const target = document.getElementById("systemMap");
+      if (!target) return;
+
+      if (!("IntersectionObserver" in window)) {
+        hydrateSystemMapMermaid();
+        return;
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          hydrateSystemMapMermaid();
+          io.disconnect();
+          break;
+        }
+      }, { threshold: 0.12 });
+
+      io.observe(target);
     }
 
     function renderCatalog(items, query){
@@ -241,19 +682,15 @@
         const repos = repoData.items || [];
         const byName = new Map(repos.map(r => [r.name, r]));
 
-        // Hero
         if(showcase.headline) $headline.textContent = showcase.headline;
         if(showcase.subheadline) $subheadline.textContent = showcase.subheadline;
 
-        // Principles
         $principles.innerHTML = (showcase.principles || [])
           .map(p => `<li>${esc(p)}</li>`).join("");
 
-        // Catalog stamp
         const lm = repoRes.headers.get("last-modified");
         if(lm) $catalogStamp.textContent = `Catalog: ${new Date(lm).toISOString().slice(0,10)}`;
 
-        // Showcase (featured)
         const featured = (showcase.featured || []).map(f => {
           const r = byName.get(f.repo) || {
             name: f.repo,
@@ -269,14 +706,15 @@
         }).join("");
         $showcase.innerHTML = featured || `<div class="muted">showcase.json に featured を追加してください。</div>`;
 
-        // System Map
         $systemMap.innerHTML = (showcase.systemMap || [])
           .map(m => mapBox(m.title, m.nodes))
           .join("");
+        setupSystemMapMermaidLazyLoad();
 
-        // Catalog
-        renderCatalog(repos, "");
-        $q.addEventListener("input", () => renderCatalog(repos, $q.value));
+        // Catalog: updated_at desc (すでに repos.json が updated sort なら不要だが保険で)
+        const sorted = [...repos].sort((a,b) => (b.updated_at || "").localeCompare(a.updated_at || ""));
+        renderCatalog(sorted, "");
+        $q.addEventListener("input", () => renderCatalog(sorted, $q.value));
 
       }catch(e){
         $hint.style.display = "block";
@@ -286,5 +724,6 @@
 
     main();
   </script>
+  <script src="./assets/glow.js"></script>
 </body>
 </html>
