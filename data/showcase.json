@@ -1,0 +1,57 @@
+{
+  "headline": "探索型UI・自動化・可視化で、意思決定を速くする。",
+  "subheadline": "個人開発ポータル（GitHub Pages）",
+  "principles": [
+    "証拠（evidence）→理解（insight）→次の行動（next action）を最短でつなぐ",
+    "PoCは最小スコープで“まず動く”、以降は差分で磨く",
+    "運用負債（更新忘れ）を仕様から消す：自動生成・自動更新が基本"
+  ],
+  "featured": [
+    {
+      "repo": "Andersen-Editor",
+      "title": "Andersen-Editor",
+      "tagline": "Mermaid round-trip と Inspector で「図の編集」を成立させる。",
+      "focus": ["Diagram", "Mermaid", "Editor"],
+      "links": {
+        "repo": "https://github.com/MariaCnightmare/Andersen-Editor"
+      }
+    },
+    {
+      "repo": "CheckMechanic",
+      "title": "CheckMechanic",
+      "tagline": "PCヘルスをスコア化し、根拠と改善アクションへ落とす。",
+      "focus": ["Diagnostics", "Dashboard", "Windows"],
+      "links": {
+        "repo": "https://github.com/MariaCnightmare/CheckMechanic"
+      }
+    },
+    {
+      "repo": "OUGI",
+      "title": "O.U.G.I",
+      "tagline": "推しうちわ生成インターフェース：PowerPoint拡張と配布設計。",
+      "focus": ["Add-in", "PowerPoint", "Automation"],
+      "links": {
+        "repo": "https://github.com/MariaCnightmare"
+      }
+    }
+  ],
+  "systemMap": [
+    {
+      "title": "意思決定フロー",
+      "nodes": [
+        "Signal（変化/障害）",
+        "Evidence（根拠の収集）",
+        "Insight（要点の抽出）",
+        "Action（次の行動）"
+      ]
+    },
+    {
+      "title": "プロジェクト群の役割",
+      "nodes": [
+        "Andersen-Editor：図式化（理解を加速）",
+        "CheckMechanic：診断（根拠を集約）",
+        "O.U.G.I：制作自動化（成果物を量産）"
+      ]
+    }
+  ]
+}

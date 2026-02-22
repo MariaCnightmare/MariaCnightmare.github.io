@@ -3,53 +3,147 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>MariaCnightmare | GitHub Pages</title>
-  <meta name="description" content="APIron-lab / 個人開発ポータル" />
+
+  <title>MariaCnightmare | Portfolio</title>
+  <meta name="description" content="個人開発ポータル：探索型UI・自動化・可視化で、意思決定を速くする。" />
+
+  <!-- Minimal OGP (imageは未設定。必要なら後で /assets/og.png を置く) -->
+  <meta property="og:title" content="MariaCnightmare | Portfolio" />
+  <meta property="og:description" content="探索型UI・自動化・可視化で、意思決定を速くする。" />
+  <meta property="og:type" content="website" />
+
   <style>
     :root { color-scheme: light dark; }
     body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif; }
-    .wrap { max-width: 980px; margin: 0 auto; padding: 56px 20px; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 64px 20px; }
     header { display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-    h1 { margin:0; font-size: 30px; letter-spacing: .2px; }
-    .tag { opacity: .75; font-size: 14px; }
-    .card { border: 1px solid color-mix(in srgb, currentColor 18%, transparent); border-radius: 16px; padding: 18px; margin-top: 16px; }
-    .grid { display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-top: 12px; }
-    a { color: inherit; text-decoration:none; }
-    a:hover { text-decoration:underline; }
-    .muted { opacity: .8; }
-    footer { margin-top: 40px; opacity: .7; font-size: 13px; }
-    .btn { display:inline-block; padding:10px 12px; border:1px solid color-mix(in srgb, currentColor 22%, transparent);
-      border-radius: 12px; }
-    .pill { display:inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent); opacity: .85; }
+    h1 { margin:0; font-size: 34px; letter-spacing: .2px; }
+    .tag { opacity:.75; font-size: 14px; }
+
+    .card {
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .hero {
+      padding: 26px;
+      border-radius: 20px;
+      border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+      background: color-mix(in srgb, currentColor 4%, transparent);
+      margin-top: 16px;
+    }
+    .hero h2 { margin: 0; font-size: 22px; line-height: 1.3; }
+    .hero p { margin: 10px 0 0; opacity: .85; line-height: 1.6; }
+
+    .btn {
+      display:inline-block;
+      padding:10px 12px;
+      border:1px solid color-mix(in srgb, currentColor 22%, transparent);
+      border-radius: 12px;
+    }
+    .bar { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; align-items:center; }
+    .right { margin-left:auto; opacity:.75; font-size:12px; }
+
+    .grid { display:grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); margin-top: 12px; }
+
+    .pill {
+      display:inline-block;
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      opacity: .85;
+      white-space: nowrap;
+    }
+
     .row { display:flex; gap:8px; flex-wrap:wrap; margin-top: 10px; align-items:center; }
     .desc { margin-top: 8px; opacity: .92; font-size: 14px; line-height: 1.55; }
     .meta { margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; opacity: .75; font-size: 12px; }
-    input[type="search"]{ width: 100%; padding: 10px 12px; border-radius: 12px;
-      border: 1px solid color-mix(in srgb, currentColor 18%, transparent); background: transparent; color: inherit; }
+
+    input[type="search"]{
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      background: transparent;
+      color: inherit;
+    }
     code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: .95em; }
-    .bar { display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
-    .right { margin-left:auto; opacity:.75; font-size:12px; align-self:center; }
+
+    .split { display:grid; grid-template-columns: 1.4fr 1fr; gap: 12px; }
+    @media (max-width: 860px){ .split { grid-template-columns: 1fr; } }
+
+    .map {
+      border-radius: 18px;
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      padding: 16px;
+    }
+    .mapTitle { font-weight: 700; margin-bottom: 8px; }
+    .mapNodes { display:flex; gap:10px; flex-wrap:wrap; }
+    .node {
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+      background: color-mix(in srgb, currentColor 3%, transparent);
+      font-size: 13px;
+      opacity:.92;
+    }
+    footer { margin-top: 44px; opacity: .7; font-size: 13px; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
       <h1>MariaCnightmare</h1>
-      <div class="tag">APIron-lab / 個人開発ポータル</div>
+      <div class="tag">個人開発ポータル</div>
     </header>
 
-    <div class="card">
-      <div class="muted">ここは「全部の入口」です。各プロジェクトへ最短導線で案内します。</div>
+    <section class="hero" aria-label="Hero">
+      <h2 id="headline">探索型UI・自動化・可視化で、意思決定を速くする。</h2>
+      <p id="subheadline">ここは個人開発の展示ポータルです。主役プロジェクト（Showcase）と、全リポジトリの自動カタログ（Catalog）を併置します。</p>
       <div class="bar">
         <a class="btn" href="https://github.com/MariaCnightmare">GitHub Profile</a>
         <a class="btn" href="https://github.com/MariaCnightmare?tab=repositories">Repositories</a>
-        <div class="right" id="lastUpdated"></div>
+        <div class="right" id="catalogStamp"></div>
       </div>
-    </div>
+    </section>
 
-    <div class="card">
-      <strong>Projects</strong>
+    <section class="card" aria-label="About">
+      <div class="split">
+        <div>
+          <strong>About</strong>
+          <div class="desc">
+            「障害の発生 → 根拠 → 影響範囲 → 次の行動」を一瞬で理解させるための探索型UIや、
+            生成・収集・整形・可視化の自動化を組み合わせて、判断コストを下げることを狙っています。
+          </div>
+        </div>
+        <div>
+          <strong>Principles</strong>
+          <ul id="principles" style="margin:10px 0 0; padding-left:18px; opacity:.9; line-height:1.7;"></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Showcase">
+      <strong>Showcase</strong>
+      <div class="muted" style="margin-top:8px;">見せたいものを先頭固定。詳細は各リポジトリへ。</div>
+      <div id="showcase" class="grid"></div>
+    </section>
+
+    <section class="card" aria-label="System Map">
+      <strong>System Map</strong>
+      <div class="muted" style="margin-top:8px;">何が何のために存在するか、を一枚で。</div>
+      <div id="systemMap" class="grid"></div>
+    </section>
+
+    <section class="card" aria-label="Catalog">
+      <strong>Catalog</strong>
       <div class="muted" style="margin-top:8px;">更新が多い順に表示（fork/archived除外）。</div>
 
       <div style="margin-top:12px;">
@@ -62,7 +156,7 @@
         <div><strong>data/repos.json が見つかりません。</strong></div>
         <div style="margin-top:6px;">ローカルで <code>./tools/update_repos.sh</code> を実行して commit/push してください。</div>
       </div>
-    </div>
+    </section>
 
     <footer>
       © MariaCnightmare — Built with GitHub Pages.
@@ -70,58 +164,126 @@
   </div>
 
   <script>
+    const $catalogStamp = document.getElementById("catalogStamp");
+    const $headline = document.getElementById("headline");
+    const $subheadline = document.getElementById("subheadline");
+    const $principles = document.getElementById("principles");
+    const $showcase = document.getElementById("showcase");
+    const $systemMap = document.getElementById("systemMap");
+
     const $projects = document.getElementById("projects");
     const $q = document.getElementById("q");
     const $hint = document.getElementById("hint");
-    const $last = document.getElementById("lastUpdated");
 
     function esc(s){ return (s ?? "").toString()
       .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;"); }
 
-    function card(r){
-      const topics = (r.topics || []).slice(0,6).map(t => `<span class="pill">${esc(t)}</span>`).join(" ");
-      const lang = r.language ? `<span class="pill">${esc(r.language)}</span>` : "";
+    function pill(text){ return `<span class="pill">${esc(text)}</span>`; }
+
+    function repoCard(r, override){
+      const topics = (r.topics || []).slice(0,6).map(pill).join(" ");
+      const lang = r.language ? pill(r.language) : "";
       const stars = typeof r.stargazers_count === "number" ? `★ ${r.stargazers_count}` : "";
       const updated = r.updated_at ? `Updated: ${r.updated_at.slice(0,10)}` : "";
       const homepage = r.homepage ? `<a class="pill" href="${esc(r.homepage)}">Demo</a>` : "";
 
+      const title = override?.title ?? r.name;
+      const tagline = override?.tagline ?? (r.description || "");
+      const focus = (override?.focus || []).slice(0,6).map(pill).join(" ");
+      const repoUrl = override?.links?.repo ?? r.html_url;
+
+      const descHtml = tagline
+        ? `<div class="desc">${esc(tagline)}</div>`
+        : `<div class="desc muted">（説明が未設定です。repo description を入れると一気に映えます。）</div>`;
+
       return `
         <div class="card" style="margin:0;">
-          <strong><a href="${esc(r.html_url)}">${esc(r.name)}</a></strong>
-          ${r.description
-            ? `<div class="desc">${esc(r.description)}</div>`
-            : `<div class="desc muted">（説明が未設定です。repo description を入れると一気に映えます。）</div>`}
-          <div class="row">${lang} ${homepage} ${topics}</div>
+          <strong><a href="${esc(repoUrl)}">${esc(title)}</a></strong>
+          ${descHtml}
+          <div class="row">${lang} ${homepage} ${focus} ${topics}</div>
           <div class="meta"><span>${esc(stars)}</span><span>${esc(updated)}</span></div>
         </div>
       `;
     }
 
-    function render(items, query){
+    function mapBox(title, nodes){
+      const nodeHtml = (nodes || []).map(n => `<div class="node">${esc(n)}</div>`).join("");
+      return `
+        <div class="map">
+          <div class="mapTitle">${esc(title)}</div>
+          <div class="mapNodes">${nodeHtml}</div>
+        </div>
+      `;
+    }
+
+    function renderCatalog(items, query){
       const q = (query || "").trim().toLowerCase();
       const filtered = !q ? items : items.filter(r => {
         const hay = [r.name, r.description, r.language, ...(r.topics || [])].join(" ").toLowerCase();
         return hay.includes(q);
       });
-      $projects.innerHTML = filtered.map(card).join("");
+      $projects.innerHTML = filtered.map(r => repoCard(r)).join("");
+    }
+
+    async function loadJson(path){
+      const res = await fetch(path, { cache: "no-store" });
+      if(!res.ok) throw new Error(`failed to load ${path}`);
+      return { data: await res.json(), res };
     }
 
     async function main(){
       try{
-        const res = await fetch("./data/repos.json", { cache: "no-store" });
-        if(!res.ok) throw new Error("repos.json not found");
-        const data = await res.json();
-        const items = data.items || [];
-        render(items, "");
-        $q.addEventListener("input", () => render(items, $q.value));
+        const [{ data: showcase }, { data: repoData, res: repoRes }] = await Promise.all([
+          loadJson("./data/showcase.json"),
+          loadJson("./data/repos.json")
+        ]);
 
-        // 表示用：repos.json の更新日時はファイルの Last-Modified から推定
-        const lm = res.headers.get("last-modified");
-        if(lm) $last.textContent = `Catalog: ${new Date(lm).toISOString().slice(0,10)}`;
+        const repos = repoData.items || [];
+        const byName = new Map(repos.map(r => [r.name, r]));
+
+        // Hero
+        if(showcase.headline) $headline.textContent = showcase.headline;
+        if(showcase.subheadline) $subheadline.textContent = showcase.subheadline;
+
+        // Principles
+        $principles.innerHTML = (showcase.principles || [])
+          .map(p => `<li>${esc(p)}</li>`).join("");
+
+        // Catalog stamp
+        const lm = repoRes.headers.get("last-modified");
+        if(lm) $catalogStamp.textContent = `Catalog: ${new Date(lm).toISOString().slice(0,10)}`;
+
+        // Showcase (featured)
+        const featured = (showcase.featured || []).map(f => {
+          const r = byName.get(f.repo) || {
+            name: f.repo,
+            html_url: f.links?.repo || "#",
+            homepage: "",
+            description: "",
+            stargazers_count: 0,
+            language: "",
+            updated_at: "",
+            topics: []
+          };
+          return repoCard(r, f);
+        }).join("");
+        $showcase.innerHTML = featured || `<div class="muted">showcase.json に featured を追加してください。</div>`;
+
+        // System Map
+        $systemMap.innerHTML = (showcase.systemMap || [])
+          .map(m => mapBox(m.title, m.nodes))
+          .join("");
+
+        // Catalog
+        renderCatalog(repos, "");
+        $q.addEventListener("input", () => renderCatalog(repos, $q.value));
+
       }catch(e){
         $hint.style.display = "block";
+        console.error(e);
       }
     }
+
     main();
   </script>
 </body>
